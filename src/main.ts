@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import env from './api/config/env'
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);  
   const config = new DocumentBuilder()
     .setTitle('API - Clina')
     .setDescription('The API - CLINA description')
@@ -20,6 +20,7 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
 
   await app.listen(env.port);
 }
