@@ -49,7 +49,7 @@ export class ScheduleService {
             }
         }
         catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new InternalServerErrorException(error.message)
         }
     }
 
@@ -93,7 +93,7 @@ export class ScheduleService {
 
         }
         catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new InternalServerErrorException(error.message)
         }
     }
 }

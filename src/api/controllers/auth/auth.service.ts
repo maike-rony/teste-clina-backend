@@ -33,7 +33,7 @@ export class AuthService {
             }
         }
         catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new InternalServerErrorException(error.message)
         }
     }
 
@@ -46,7 +46,7 @@ export class AuthService {
             })
         }
         catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new InternalServerErrorException(error.message)
         }
     }
 

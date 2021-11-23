@@ -24,41 +24,34 @@ export class RoomService {
         private readonly imageRepository: Repository<Images>
     ) { }
 
-    async listDetailsData(query: RoomDTO): Promise<HttpResponse | HttpException | any> {
+    async listDetailsData(query: RoomDTO): Promise<HttpResponse | HttpException> {
         try {
-            const resultRoomDetailsData: Array<Schedules> = await this.scheduleRepository.find({
-                where: {
-                    date: query.date,
-                    status: StatusSchedule.DISPONIVEL
-                }
-            })
+            const resultRoomDetailsData: any = await this.roomRepository
+                .createQueryBuilder('rooms')
+                .select('schedules.id_schedule scheduleId, rooms.id_room roomId, rooms.name, rooms.description, rooms.address, rooms.price, rooms.address_public_place, rooms.address_number')
+                .addSelect('rooms.address_district district, rooms.address_city city, rooms.address_cep cep, rooms.address_uf uf, rooms.address_country country')
+                .addSelect('schedules.status status')
+                .addSelect('images.image image')
+                .innerJoin(Schedules, "schedules", "schedules.id_room = rooms.id_room")
+                .innerJoin(Images, "images", "images.id_room = rooms.id_room")
+                .where('schedules.status=:status and schedules.date=:date', {
+                    status: StatusSchedule.DISPONIVEL,
+                    date: query.date
+                })
+                .distinctOn(['rooms.id_room'])
+                .orderBy('rooms.id_room', 'ASC')
+                .getRawMany()
+
 
             if (resultRoomDetailsData.length > 0) {
-                return ok(resultRoomDetailsData.map((result: Schedules) => {
-                    return {
-                        scheduleId: result.id_schedule,
-                        roomId: result.id_room,
-                        status: result.status,
-                        date: result.date,
-                        time_start: result.time_start,
-                        time_end: result.time_end,
-                        period: [
-                            result.period_morning ? 'Manhã' :
-                                result.period_evening ? 'Tarde' :
-                                    result.period_night ? 'Noite' :
-                                        ''
-                        ],
-                        created_at: result.created_at,
-                        updated_at: result.updated_at
-                    }
-                }))
+                return ok(resultRoomDetailsData)
             }
             else {
                 throw new BadRequestException('Empty Date Details Room!')
             }
         }
         catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new InternalServerErrorException(error.message)
         }
     }
 
@@ -101,7 +94,7 @@ export class RoomService {
             }
         }
         catch (error) {
-            throw new InternalServerErrorException(error)
+            throw new InternalServerErrorException(error.message)
         }
     }
 }

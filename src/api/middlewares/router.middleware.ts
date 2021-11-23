@@ -33,8 +33,8 @@ export class RouterMiddleware implements NestMiddleware {
                 }
 
             }
-            catch (erro) {
-                throw new UnauthorizedException(erro)    
+            catch (erro) {                
+                throw new UnauthorizedException('Token Expired!')    
             }
         }
     }

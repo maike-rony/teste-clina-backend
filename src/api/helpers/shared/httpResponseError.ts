@@ -13,7 +13,7 @@ export class HttpErrorFilter implements ExceptionFilter {
             
             response.status(status)
                 .json(res);
-        }
+        }        
         else {            
             response.status(500)
                 .json(responseError(('ResponseError')));
