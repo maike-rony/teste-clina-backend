@@ -21,27 +21,29 @@ export class ScheduleService {
             const resultListRoom: Array<Schedules> = await this.scheduleRepository.find({
                 where: {
                     id_room: id,
-                    status: StatusSchedule.RESERVADO
+                    status: StatusSchedule.DISPONIVEL
                 }
             })
 
             if (resultListRoom.length > 0) {
-                const resultDTO: ScheduleResponseDTO = {
-                    scheduleId: resultListRoom[0].id_schedule,
-                    roomId: resultListRoom[0].id_room,
-                    status: resultListRoom[0].status,
-                    date: resultListRoom[0].date,
-                    time_start: resultListRoom[0].time_start,
-                    time_end: resultListRoom[0].time_end,
-                    period: [
-                        resultListRoom[0].period_morning ? 'Manhã' :
-                            resultListRoom[0].period_evening ? 'Tarde' :
-                                resultListRoom[0].period_night ? 'Noite' :
-                                    ''
-                    ],
-                    created_at: resultListRoom[0].created_at,
-                    updated_at: resultListRoom[0].updated_at,
-                }
+                const resultDTO: Array<ScheduleResponseDTO> = resultListRoom.map(result => { 
+                    return {
+                        scheduleId: result.id_schedule,
+                        roomId: result.id_room,
+                        status: result.status,
+                        date: result.date,
+                        time_start: result.time_start,
+                        time_end: result.time_end,
+                        period: [
+                            result.period_morning ? 'Manhã' :
+                            result.period_evening ? 'Tarde' :
+                            result.period_night ? 'Noite' :
+                            ''
+                        ],
+                        created_at: result.created_at,
+                        updated_at: result.updated_at,
+                    }
+                })
                 return ok(resultDTO)
             }
             else {

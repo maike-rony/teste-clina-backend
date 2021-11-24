@@ -6,6 +6,7 @@ export const responseError = (error: any): HttpResponseError => ({
   message: error.message
 })
 
+
 export const unauthorized = (): HttpResponseError => ({
   statusCode: 401,
   name: 'Unauthorized',
