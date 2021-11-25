@@ -14,7 +14,7 @@ export class Schedules {
   status: string;
 
   @Column({ type: 'timestamp with time zone', precision: 6, nullable: false })
-  date: Date;
+  date: string;
 
   @Column({ type: 'time', nullable: false })
   time_start: Date;

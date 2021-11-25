@@ -2,10 +2,10 @@ export interface ScheduleResponseDTO {
     scheduleId: number;
     roomId: number;
     status: string;
-    date: Date;
+    date: string;
     time_start: Date;
     time_end: Date;   
-    period: Array<string>;
+    period: string;
     created_at: Date;
     updated_at: Date;
   }

@@ -31,20 +31,23 @@ export class ScheduleService {
                         scheduleId: result.id_schedule,
                         roomId: result.id_room,
                         status: result.status,
-                        date: result.date,
+                        date: String(new Date(result.date).getTime()),
                         time_start: result.time_start,
                         time_end: result.time_end,
-                        period: [
+                        period: 
                             result.period_morning ? 'Manhã' :
                             result.period_evening ? 'Tarde' :
                             result.period_night ? 'Noite' :
                             ''
-                        ],
+                        ,
                         created_at: result.created_at,
                         updated_at: result.updated_at,
                     }
                 })
-                return ok(resultDTO)
+                return ok(resultDTO.reduce((r, a) => {                    
+                    r[a.date] = [...r[a.date] || [], a]
+                    return r;
+                }, {}))
             }
             else {
                 throw new BadRequestException('Empty Reserved Room')
